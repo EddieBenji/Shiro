@@ -6,6 +6,8 @@
 
 package shiro;
 
+import ejemplo.Quickstart;
+import org.apache.logging.log4j.LogManager;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -20,6 +22,9 @@ import org.apache.shiro.subject.Subject;
  * @author Javier Mijangos
  */
 public class CrearIni {
+    
+    private static final org.apache.logging.log4j.Logger log = LogManager.getLogger(CrearIni.class);
+    
     
     DefaultSecurityManager sm=new DefaultSecurityManager();
         Ini ini=new Ini();
@@ -48,28 +53,35 @@ public class CrearIni {
             try {
                 currentUser.login(token);
             } catch (UnknownAccountException uae) {
-                System.out.println("No hay usuario con el nombre " + token.getPrincipal() );
+                log.info("No hay usuario con el nombre " + token.getPrincipal() );
+                
             } catch ( IncorrectCredentialsException ice ) {
-                System.out.println("Password para la cuenta " + token.getPrincipal() + " es incorrecto");
+                log.info("Password para la cuenta " + token.getPrincipal() + " es incorrecto");
             }
         }     
                   
         if(currentUser.isAuthenticated()){
-            System.out.println("User [" + currentUser.getPrincipal() + "] logged in successfully.");
+            log.info("User [" + currentUser.getPrincipal() + "] logged in successfully.");
+            
         }else{
-            System.out.println("logged in fail.");
+            log.info("logged in fail.");
+            
         }
         
         if ( currentUser.hasRole( "Vendedor" ) ) {
-            System.out.println("Puede vender" );
+            log.info("Puede vender");
+            
         } else {
-            System.out.println( "No puede vender" );
+            log.info("No puede vender" );
+            
         }
  
          if ( currentUser.hasRole( "Conductor" ) ) {
-            System.out.println("Maneja" );
+             log.info("Maneja");
+            
         } else {
-            System.out.println( "No maneja" );
+             log.info( "No maneja" );
+            
         }
     }
     
