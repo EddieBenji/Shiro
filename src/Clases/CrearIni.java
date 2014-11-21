@@ -6,7 +6,6 @@
 
 package shiro;
 
-import ejemplo.Quickstart;
 import org.apache.logging.log4j.LogManager;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;

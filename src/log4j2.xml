@@ -20,7 +20,7 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger name="miImplementacion" level="TRACE" additivity="false">
+        <Logger name="Clases" level="TRACE" additivity="false">
             <AppenderRef ref="archivo"/>
             <AppenderRef ref="consola"/>
         </Logger>
