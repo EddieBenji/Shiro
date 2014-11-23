@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package shiro;
+package Clases;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.shiro.SecurityUtils;
