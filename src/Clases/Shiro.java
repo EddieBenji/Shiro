@@ -42,11 +42,13 @@ public class Shiro {
 
     //Esta es la sección de nuestro ini donde se almacenan los uduarios y contraseñas
     private Ini.Section usuarios;
+    private Ini.Section roles;
 
     public Shiro() {
         sm = new DefaultSecurityManager();
         ini = new Ini();
         usuarios = ini.addSection(IniRealm.USERS_SECTION_NAME);
+        roles = ini.addSection(IniRealm.ROLES_SECTION_NAME);
         inicializar();
     }
 
@@ -66,6 +68,16 @@ public class Shiro {
         sm.setRealm(new IniRealm(ini));
         SecurityUtils.setSecurityManager(sm);
     }
+    
+    /**
+     * Se agregan roles que se vayan a utilizar
+     * 
+     * @param rol
+     **/
+    public void agregarRol(String rol){
+        roles.put(rol, "*");
+        actualizar();
+    }
 
     /**
      * Se agregan cuentas nuevas a nuestro ini y se mandan a actualizar los
@@ -75,9 +87,9 @@ public class Shiro {
      * @param clave
      *
      */
-    public void agregarCuenta(String usuario, String clave) {
+    public void agregarCuenta(String usuario, String clave, String rol) {
         String claveEncriptada = encriptar(clave);
-        usuarios.put(usuario, claveEncriptada);
+        usuarios.put(usuario, claveEncriptada + ", " + rol);
         actualizar();
     }
 
@@ -132,6 +144,18 @@ public class Shiro {
          currentUser = SecurityUtils.getSubject();
         return currentUser.getPrincipal().toString();
 
+    }
+    
+    /** 
+     * Revisa si el usuario tiene el rol 
+     * 
+     * @param rol
+     * 
+     * @return boolean
+     **/
+    public boolean hasRol(String rol){ 
+        currentUser = SecurityUtils.getSubject();
+        return currentUser.hasRole(rol);        
     }
 
     public void logOut() {
