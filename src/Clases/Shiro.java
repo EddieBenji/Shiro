@@ -108,7 +108,8 @@ public class Shiro {
     }
     Subject currentUser;
 
-    public boolean logIn(String usuario, String clave) {
+    public boolean logIn(String usuario, String clave) 
+            throws UnknownAccountException,IncorrectCredentialsException{
         //Un Subject es cualquier cosa que esté usando el sistema,
         //En este caso es una persona, pero es anonima y no esta identificada.
         currentUser = SecurityUtils.getSubject();
@@ -116,21 +117,9 @@ public class Shiro {
         String claveEncriptada = encriptar(clave);
         UsernamePasswordToken token = new UsernamePasswordToken(usuario, claveEncriptada);
         token.setRememberMe(true);
-        try {
-            currentUser.login(token);
-        } catch (UnknownAccountException uae) {
-
-            JOptionPane.showMessageDialog(null, "No hay usuario con el nombre "
-                    + token.getPrincipal());
-            uae.printStackTrace();
-        } catch (IncorrectCredentialsException ice) {
-
-            JOptionPane.showMessageDialog(null, "Password para la cuenta "
-                    + token.getPrincipal() + " es incorrecto");
-
-            ice.printStackTrace();
-        }
-
+        
+        currentUser.login(token);
+        
         return currentUser.isAuthenticated();
     }
 
