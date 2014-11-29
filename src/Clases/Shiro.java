@@ -1,6 +1,5 @@
 package Clases;
 
-import javax.swing.JOptionPane;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -37,12 +36,15 @@ public class Shiro {
      * especial.
      *
      */
+    
     private DefaultSecurityManager sm;
     private Ini ini;
-
-    //Esta es la sección de nuestro ini donde se almacenan los uduarios y contraseñas
+    //Esta es la sección de nuestro ini donde se almacenan los usuarios y contraseñas
     private Ini.Section usuarios;
     private Ini.Section roles;
+    
+    //el usuario actual:
+    private Subject currentUser;
 
     public Shiro() {
         sm = new DefaultSecurityManager();
@@ -55,7 +57,6 @@ public class Shiro {
     private void inicializar() {
         //Se setea el relm, con el ini inicializado
         sm.setRealm(new IniRealm(ini));
-
         //Se setea el securityManayer que estamos configurando
         SecurityUtils.setSecurityManager(sm);
     }
@@ -73,9 +74,10 @@ public class Shiro {
      * Se agregan roles que se vayan a utilizar
      * 
      * @param rol
+     * @param Permisos
      **/
-    public void agregarRol(String rol){
-        roles.put(rol, "*");
+    public void agregarRol(String rol, String Permisos){
+        roles.put(rol, Permisos);
         actualizar();
     }
 
@@ -107,7 +109,7 @@ public class Shiro {
 //        System.out.println( hash.toBase64());        
         return hash.toBase64();
     }
-    Subject currentUser;
+
 
     public boolean logIn(String usuario, String clave) 
             throws UnknownAccountException,IncorrectCredentialsException{
@@ -137,7 +139,7 @@ public class Shiro {
     }
     
     /** 
-     * Revisa si el usuario tiene el rol 
+     * Revisa si el usuario tiene el rol que se le especifica.
      * 
      * @param rol
      * 
@@ -147,11 +149,17 @@ public class Shiro {
         currentUser = SecurityUtils.getSubject();
         return currentUser.hasRole(rol);        
     }
+    
+    public boolean hasPermisos(String permiso){
+        currentUser = SecurityUtils.getSubject();
+        return currentUser.isPermitted(permiso);
+    }
+    
+    
 
     public void logOut() {
         currentUser = SecurityUtils.getSubject();
         currentUser.logout();
-        //JOptionPane.showMessageDialog(null, "La sesión se ha cerrado correctamente");
     }
 
 }
