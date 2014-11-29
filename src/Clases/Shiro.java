@@ -85,6 +85,7 @@ public class Shiro {
      *
      * @param usuario
      * @param clave
+     * @param rol
      *
      */
     public void agregarCuenta(String usuario, String clave, String rol) {
