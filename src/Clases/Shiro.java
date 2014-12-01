@@ -91,8 +91,7 @@ public class Shiro {
      *
      */
     public void agregarCuenta(String usuario, String clave, String rol) {
-        String claveEncriptada = encriptar(clave);
-        usuarios.put(usuario, claveEncriptada + ", " + rol);
+        usuarios.put(usuario, clave + ", " + rol);
         actualizar();
     }
 
